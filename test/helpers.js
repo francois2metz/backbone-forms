@@ -2,7 +2,7 @@ module('keyToTitle');
 
 test('Transforms camelCased string to words', function() {
     var fn = Form.helpers.keyToTitle;
-    
+
     equal(fn('test'), 'Test');
     equal(fn('camelCasedString'), 'Camel Cased String');
 });
@@ -20,7 +20,7 @@ test('todo', function() {
 module('createEditor');
 
 (function() {
-    
+
     var create = Form.helpers.createEditor,
         editors = Form.editors;
 
@@ -33,8 +33,8 @@ module('createEditor');
             model: 'test',
             options: []
         }
-    };    
-    
+    };
+
     test('Accepts strings for included editors', function() {
         ok(create('Text', options) instanceof editors.Text);
         ok(create('Number', options) instanceof editors.Number);
@@ -49,7 +49,7 @@ module('createEditor');
         ok(create(editors.Text, options) instanceof editors.Text);
         ok(create(editors.Select, options) instanceof editors.Select);
     });
-    
+
 })();
 
 
@@ -57,12 +57,12 @@ module('createEditor');
 module('triggerCancellableEvent');
 
 (function() {
-    
+
     var trigger = Form.helpers.triggerCancellableEvent;
-    
+
     test('Passes through arguments', function() {
         expect(2);
-        
+
         var view = new Backbone.View();
 
         view.bind('add', function(arg1, arg2, next) {
@@ -72,16 +72,16 @@ module('triggerCancellableEvent');
 
         trigger(view, 'add', ['foo', 'bar']);
     });
-    
+
     test('Default action runs if next is called', function() {
         expect(1);
-        
+
         var view = new Backbone.View();
-        
+
         view.bind('remove', function(next) {
             next();
         });
-        
+
         trigger(view, 'remove', [], function() {
             ok(true);
         });
@@ -89,11 +89,11 @@ module('triggerCancellableEvent');
 
     test('Default action doesnt run if next is not called', function() {
         var view = new Backbone.View();
-        
+
         view.bind('edit', function(next) {
             //Don't continue
         });
-        
+
         trigger(view, 'edit', [], function() {
             ok(false); //Shouldn't run
         });

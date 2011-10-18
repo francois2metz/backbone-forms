@@ -1,26 +1,26 @@
 ;(function() {
-    
+
     var Form = Backbone.Form,
         Base = Form.editors.Base,
         createTemplate = Form.helpers.createTemplate,
         triggerCancellableEvent = Form.helpers.triggerCancellableEvent,
         exports = {};
-    
+
     /**
      * Additional editors that depend on jQuery UI
      */
     exports.Date = Base.extend({
 
         className: 'bbf-date',
-        
+
         initialize: function(options) {
             Base.prototype.initialize.call(this, options);
-            
+
             if (!this.value) {
                 var date = new Date();
                 date.setSeconds(0);
                 date.setMilliseconds(0);
-                
+
                 this.value = date;
             }
         },
@@ -52,7 +52,7 @@
 
             return date;
         },
-        
+
         setValue: function(value) {
             $('input', this.el).datepicker('setDate', value);
         }
@@ -101,7 +101,7 @@
             //Store references to selects
             this.$hours = $('select:eq(0)', this.el);
             this.$mins = $('select:eq(1)', this.el);
-            
+
             //Set time
             this.setValue(this.value);
 
@@ -121,10 +121,10 @@
 
             return date;
         },
-        
+
         setValue: function(date) {
             exports.Date.prototype.setValue.call(this, date);
-            
+
             this.$hours.val(date.getHours());
             this.$mins.val(date.getMinutes());
         }
@@ -151,7 +151,7 @@
                 </div>\
             </li>\
         '),
-        
+
         editorTemplate: createTemplate('\
             <div class="bbf-field">\
                 <div class="bbf-list-editor"></div>\
@@ -168,19 +168,19 @@
             Base.prototype.initialize.call(this, options);
 
             if (!this.schema) throw "Missing required option 'schema'";
-            
+
             this.schema.listType = this.schema.listType || 'Text';
-            
+
             if (this.schema.listType == 'NestedModel' && !this.schema.model)
                 throw "Missing required option 'schema.model'";
         },
 
         render: function() {
             var el = $(this.el);
-            
+
             //Main element
             el.html(this.template());
-            
+
             //Create list
             var self = this,
                 el = $(this.el),
@@ -189,8 +189,8 @@
                 itemToString = this.itemToString,
                 itemTemplate = this.itemTemplate,
                 listEl = $('ul', el);
-            
-            _.each(data, function(itemData) {     
+
+            _.each(data, function(itemData) {
                 var text = itemToString.call(self, itemData);
 
                 //Create DOM element
@@ -212,7 +212,7 @@
                     cursor: 'move',
                     containment: 'parent'
                 });
-                
+
                 el.addClass('bbf-list-sortable');
             }
 
@@ -240,20 +240,20 @@
          */
         itemToString: function(data) {
             if (!data) return data;
-            
+
             var schema = this.schema;
-            
+
             //If there's a specified toString use that
             if (schema.itemToString)
                 return schema.itemToString(data);
-            
+
             //Otherwise check if it's NestedModel with it's own toString() method
             if (this.schema.listType == 'NestedModel') {
                 var model = new (this.schema.model)(data);
-                
+
                 return model.toString();
             }
-            
+
             //Last resort, just return the data as is
             return data;
         },
@@ -263,7 +263,7 @@
          */
         addNewItem: function(event) {
             event.preventDefault();
-                     
+
             var self = this;
 
             this.openEditor(null, function(value) {
@@ -300,7 +300,7 @@
          */
         editItem: function(event) {
             event.preventDefault();
-                   
+
             var self = this,
                 li = $(event.target).closest('li'),
                 originalValue = $.data(li[0], 'data');
@@ -319,20 +319,20 @@
 
         deleteItem: function(event) {
             event.preventDefault();
-        
+
             var self = this,
                 li = $(event.target).closest('li'),
                 data = $.data(li[0], 'data');
 
             var confirmDelete = (this.schema.confirmDelete) ? this.schema.confirmDelete : false,
                 confirmMsg = this.schema.confirmDeleteMsg || 'Are you sure?';
-                        
+
             function remove() {
                 triggerCancellableEvent(self, 'removeItem', [data], function() {
                     li.remove();
                 });
             }
-            
+
             if (this.schema.confirmDelete) {
                 if (confirm(confirmMsg)) remove();
             } else {
@@ -355,7 +355,7 @@
                 schema: schema,
                 value: data
             }).render();
-            
+
             var container = $(this.editorTemplate());
             $('.bbf-list-editor', container).html(editor.el);
 
@@ -375,7 +375,7 @@
                     'OK': function() {
                         callback(editor.getValue());
                         close();
-                    }, 
+                    },
                     'Cancel': close
                 }
             });
@@ -390,7 +390,7 @@
 
             return data;
         },
-        
+
         setValue: function(value) {
             this.value = value;
             this.render();
@@ -401,5 +401,5 @@
 
     //Exports
     _.extend(Form.editors, exports);
-    
+
 })();

@@ -9,7 +9,7 @@ var Post = Backbone.Model.extend({
         author: 'Sterling Archer',
         slug: 'danger-zone'
     },
-    
+
     schema: {
         title:      { type: 'Text' },
         content:    { type: 'TextArea' },

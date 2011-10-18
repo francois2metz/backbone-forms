@@ -30,14 +30,14 @@ Requires BackboneJS and jQuery.
 
 Include backbone-forms.js and backbone-forms.css:
 
-    <link href="backbone-forms/backbone-forms.css" rel="stylesheet" type="text/css"/> 
+    <link href="backbone-forms/backbone-forms.css" rel="stylesheet" type="text/css"/>
     <script src="backbone-forms/src/backbone-forms.js"></script>
 
 Optionally, you can include the extra editors, for example those that require jQuery UI:
 
     <script src="backbone-forms/src/jquery-ui-editors.js"></script>
-    
-    
+
+
 Usage
 =====
 
@@ -60,15 +60,15 @@ Define a 'schema' attribute on your Backbone models. The schema keys should matc
     });
 
 Create the form in your Views:
-    
+
     var formView = Backbone.View.extend({
         render: function() {
             var form = new Backbone.Form({
                 model: users.get(userId)
             }).render();
-            
+
             $(this.el).append(form.el);
-            
+
             return this;
         }
     });
@@ -100,7 +100,7 @@ You can create a form without tying it to a model. For example, to create a form
     }).render();
 
 Then instead of form.commit(), do:
-    
+
     var data = form.getValue(); //Returns object with new form values
 
 
@@ -153,18 +153,18 @@ Creates and populates a &lt;select&gt; element.
     - Array of strings/numbers
     - Array of objects in the form `{ val: 123, label: 'Text' }`
     - A Backbone collection
-    - A function that calls back with one of the above 
+    - A function that calls back with one of the above
 
 Examples:
-    
+
     var schema = {
         country: { 'Select', options: new CountryCollection() }
     };
-    
+
     var schema = {
         users: { 'Select', options: function(callback) {
             users = db.getUsers();
-            
+
             callback(users);
         }}
     }
@@ -215,7 +215,7 @@ Examples:
     var schema = {
         address: { type: 'NestedModel', model: Address }
     };
-    
+
 
 List
 ----
@@ -248,7 +248,7 @@ Creates a sortable and editable list of items, which can be any of the above sch
 
 
 Examples:
-    
+
     var schema = {
         users: { type: 'List', listType: 'Object', itemToString: function(user) {
                 return user.firstName + ' ' + user.lastName;
@@ -263,7 +263,7 @@ The following events are fired when the user actions an item:
 
 - `addItem`
 - `editItem`
-- `removeItem` 
+- `removeItem`
 
 Each event callback receives the relevant item value as an object, and a 'next' callback. To cancel the event and prevent the default action, do not run the callback.
 
@@ -271,7 +271,7 @@ This allows you to run asynchronous code, for example to check with the database
 
     var form = new Backbone.Form({ model: this.model }),
         list = form.fields.list.editor;
-    
+
     //Only add the item if the username is available
     list.bind('addItem', function(item, next) {
         database.getUser(item.username, function(user) {
@@ -331,14 +331,14 @@ A string that will be prefixed to the form DOM element IDs. Useful if you will h
 Editors without forms
 =====================
 
-You can add editors by themselves, without being part of a form. For example: 
+You can add editors by themselves, without being part of a form. For example:
 
     var select = new Backbone.Form.editors.Select({
         model: user,
         key: 'country',
         options: getCountries()
     }).render();
-    
+
     //When done, apply selection to model:
     select.commit();
 
@@ -347,33 +347,33 @@ Custom Editors
 ==============
 
 Custom editors can be written. They must extend from Backbone.Form.editors.Base.
-    
+
     var CustomEditor = Backbone.Form.editors.Base.extend({
-        
+
         tagName: 'input',
-        
+
         initialize: function(options) {
             //Call parent constructor
             Backbone.Form.editors.Base.prototype.initialize.call(this, options);
-            
+
             //Custom setup code.
             if (this.schema.customParam) this.doSomething();
         },
-        
+
         render: function() {
             this.setValue(this.value);
-            
+
             return this;
         },
-        
+
         getValue: function() {
             return $(this.el).val();
         },
-        
+
         setValue: function(value) {
             $(this.el).val(this.value);
         }
-        
+
     });
 
 **Notes:**

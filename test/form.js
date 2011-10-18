@@ -42,7 +42,7 @@ test("'model' option - Populates the form", function() {
 
 test("'data' option - Used if no model provided. Populates the form.", function() {
     var data = {
-        title: 'Yuuup', 
+        title: 'Yuuup',
         author: 'Lana Kang'
     };
 
@@ -85,7 +85,7 @@ test("commit() - updates the model with form values", function() {
     }).render();
 
     //Change the title in the form and save
-    $('#title', form.el).val('New title');        
+    $('#title', form.el).val('New title');
     form.commit();
 
     equal(post.get('title'), 'New title');
@@ -93,7 +93,7 @@ test("commit() - updates the model with form values", function() {
 
 test("getValue() - returns form value as an object", function() {
     var data = {
-        title: 'Yuuup', 
+        title: 'Yuuup',
         author: 'Lana Kang'
     };
 
@@ -107,9 +107,9 @@ test("getValue() - returns form value as an object", function() {
 
     //Change the title in the form and save
     $('#title', form.el).val('Nooope');
-    
+
     var result = form.getValue();
-    
+
     equal(result.title, 'Nooope');
     equal(result.author, 'Lana Kang');
 });
@@ -118,7 +118,7 @@ test("getValue(key) - returns specific field value", function() {
     var form = new Form({
         model: new Post
     }).render();
-    
+
     equal(form.getValue('title'), 'Danger Zone!');
 });
 
@@ -126,40 +126,40 @@ test("setValue() - updates form field values", function() {
     var form = new Form({
         model: new Post
     }).render();
-    
+
     form.setValue({
         title: 'Danger Zone 2',
         slug: 'danger-zone-2'
     });
-    
+
     //Check changed fields
     equal(form.fields.title.getValue(), 'Danger Zone 2');
     equal(form.fields.slug.getValue(), 'danger-zone-2');
-    
+
     //Check fields that shouldn't have changed
     equal(form.fields.author.getValue(), 'Sterling Archer');
 });
 
 test("remove() - removes all child views and itself", function() {
     var counter = 0;
-    
+
     //Mock out the remove method so we can tell how many times it was called
     var _remove = Backbone.View.prototype.remove;
     Backbone.View.prototype.remove = function() {
         counter++;
     }
-    
+
     var form = new Form({
         model: new Post,
         fields: ['author', 'title', 'content', 'slug']
     }).render();
-    
+
     form.remove();
-    
+
     //remove() should have been called twice for each field (editor and field)
     //and once for the form itself
     equal(counter, 9);
-    
+
     //Restore remove method
     Backbone.View.prototype.remove = _remove;
 });
@@ -168,7 +168,7 @@ test('Allows access to field views', function() {
     var form = new Form({
         model: new Post
     }).render();
-    
+
     ok(form.fields.title instanceof Form.Field);
     ok(form.fields.author instanceof Form.Field);
 });
