@@ -56,6 +56,30 @@ test("'schema.title' option - Defaults to formatted version of 'key' option", fu
     equal($('label', field.el).html(), 'Camel Cased Title');
 });
 
+test("'schema.attrs' option - Populate attrs of the field", function() {
+    var field = new Field({
+        key: 'title',
+        schema: {
+            attrs: {
+                placeholder: 'The placeholder'
+            }
+        }
+    }).render();
+
+    equal($('input', field.el).attr('placeholder'), 'The placeholder');
+
+    var field = new Field({
+        key: 'title',
+        schema: {
+            type: 'Checkbox',
+            attrs: {
+                required: 'required'
+            }
+        }
+    }).render();
+    equal($('input', field.el).attr('required'), 'required');
+});
+
 test("'model' option - Populates the field with the given 'key' option from the model", function() {
     var field = new Field({
         model: new Post,

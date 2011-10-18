@@ -434,6 +434,9 @@
             if (this.schema && this.schema.dataType) type = this.schema.dataType;
 
             $(this.el).attr('type', type);
+
+            //Allow to pass custom attributes
+            if (this.schema && this.schema.attrs) $(this.el).attr(options.schema.attrs || {});
         },
 
         /**
@@ -529,6 +532,9 @@
             editors.Base.prototype.initialize.call(this, options);
 
             $(this.el).attr('type', 'checkbox');
+
+            //Allow to pass custom attributes
+            if (this.schema && this.schema.attrs) $(this.el).attr(options.schema.attrs || {});
         },
 
         /**
